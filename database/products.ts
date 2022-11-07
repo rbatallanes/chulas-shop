@@ -3,16 +3,16 @@ interface SeedProduct {
     images: string[];
     inStock: number;
     price: number;
-    sizes: ValidSize[];
+    sizes: ValidSizes[];
     slug: string;
     tags: string[];
     title: string;
-    type: ValidType;
+    type: ValidTypes;
     gender: 'men'|'women'|'kid'|'unisex'
 }
 
-type ValidSize = 'XS'|'S'|'M'|'L'|'XL'|'XXL'|'XXXL';
-type ValidType = 'shirts'|'pants'|'hoodies'|'hats';
+type ValidSizes = 'XS'|'S'|'M'|'L'|'XL'|'XXL'|'XXXL';
+type ValidTypes = 'shirts'|'pants'|'hoodies'|'hats';
 
 interface SeedData {
     products: SeedProduct[],
