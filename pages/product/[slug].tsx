@@ -25,11 +25,6 @@ const ProductPage: NextPage<Props> = ({product}) => {
   // if(isLoading){return <h1>Cargando...</h1> }
   // if(!article){return <h1>No existe articulo</h1>}
   
-  console.log(product)
-
-  console.log(product.title)
-  
-
   return (
     <ShopLayout title={product.title} pageDescription={product.description}>
       <Grid container spacing={3}>
@@ -82,10 +77,7 @@ export const getServerSideProps: GetServerSideProps = async ({params}) => {
   const {slug} = params as {slug: string}
 
   const { data:product } = await  shopApi.get<Article>(`/articles/slug/${slug}`)
-
-  console.log(product);
   
-
   if(!product){
     return{
       redirect:{

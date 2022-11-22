@@ -33,19 +33,19 @@ export const Navbar = () => {
 
             <Box sx={{display:{xs:'none',sm:'block'}}}>
               
-              <NextLink legacyBehavior href={'/category/men'} passHref>
+              <NextLink legacyBehavior href={'/category/camisas'} passHref>
                 <Link>
-                  <Button color={asPath==='/category/men' ? 'primary':'info'} >Hombres</Button>
+                  <Button color={asPath==='/category/camisas' ? 'primary':'info'} >Camisas</Button>
                 </Link>
               </NextLink>
-              <NextLink legacyBehavior href={'/category/women'} passHref>
+              <NextLink legacyBehavior href={'/category/blusas'} passHref>
                 <Link>
-                  <Button color={asPath==='/category/women' ? 'primary':'info'}>Mujeres</Button>
+                  <Button color={asPath==='/category/blusas' ? 'primary':'info'}>Blusas</Button>
                 </Link>
               </NextLink>
-              <NextLink legacyBehavior href={'/category/kid'} passHref>
+              <NextLink legacyBehavior href={'/category/sastreria'} passHref>
                 <Link>
-                  <Button color={asPath==='/category/kid' ? 'primary':'info'}>Niños</Button>
+                  <Button color={asPath==='/category/sastreria' ? 'primary':'info'}>Sastrería</Button>
                 </Link>
               </NextLink>
               

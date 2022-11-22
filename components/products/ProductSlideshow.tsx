@@ -16,9 +16,6 @@ interface Props{
 export const ProductSlideshow: FC<Props> = ({images}) => {
 // export const ProductSlideshow = () => {
 
-  console.log(images)
-
-
   return (
     <Slide
       easing='ease'

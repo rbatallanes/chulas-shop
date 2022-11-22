@@ -12,8 +12,6 @@ interface Props{
 
 export const SizeSelector: FC<Props> = ({selectedSize,sizes}) => {
 
-  console.log(sizes);
-  
   return (
     <Box>
         {/* {sizes.map(size=>(
