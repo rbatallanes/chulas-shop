@@ -1,10 +1,11 @@
 import { Grid } from '@mui/material'
 import React, { FC } from 'react'
-import { IProduct } from '../../interfaces'
+import { Article, IProduct } from '../../interfaces'
 import {ProductCard} from '.';
 
 interface Props{
-    products: IProduct[];
+    //products: IProduct[];
+    products: Article[];
 }
 
 export const ProductList: FC<Props> = ({products}) => {
@@ -13,7 +14,7 @@ export const ProductList: FC<Props> = ({products}) => {
         {
             products.map(product=>(
                 <ProductCard 
-                    key={product.slug}
+                    key={product.id}
                     product={product}
                 />
             ))
