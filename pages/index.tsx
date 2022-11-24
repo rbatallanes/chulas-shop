@@ -32,14 +32,14 @@ interface Props{
   )
 }
 
-export const getStaticProps: GetStaticProps = async (ctx) => {
-  const {data} = await  shopApi.get<Article>('/articles')
+// export const getStaticProps: GetStaticProps = async (ctx) => {
+//   const {data} = await  shopApi.get<Article>('/articles')
   
-  return {
-    props: {
-      articles: data
-    }
-  }
-}
+//   return {
+//     props: {
+//       articles: data
+//     }
+//   }
+// }
 
 export default HomePage

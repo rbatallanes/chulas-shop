@@ -10,25 +10,28 @@ const CategoryPage = () => {
     const router = useRouter()
     const {category,isLoading} = useCategory(`/categories/name/${router.query.name}`)
 
-    console.log(category);
-    
   return (
     <ShopLayout title={'Chulas Shop'} pageDescription={'Encuentra los mejores productos en Chulas Tuc'}>
       <Typography variant='h1' component={'h1'}>Tienda Chulas</Typography>
       <Typography variant='h2' sx={{mb:1}}>Categoría {router.query.name}</Typography>
 
-      {category.map(categ=>(
-
-      //categ.products?.length
-
-        categ.products?.map(product=>(
-          <> {product.articles} </>
-
-        ))
-        
-
-      ))}
-
+      {isLoading
+        ? <FullScreenLoading/>
+        : <>
+          {!!category 
+            && category.products?.map(product=>(
+              
+              // <h1 key={product.id}>{product.brand}</h1>
+              
+              // product.articles.map(article=>(
+              //   <h1 key={article.id}>{article.title}</h1>
+              // ))
+      
+              <ProductList key={product.id} products={ product.articles} />
+            ))
+          }
+        </>
+      } 
 
       {/* { isLoading
         ? <FullScreenLoading/>

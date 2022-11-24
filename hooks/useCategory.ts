@@ -3,10 +3,10 @@ import { Categories } from '../interfaces'
 
 export const useCategory=(url: string,config: SWRConfiguration={})=>{
 
-    const { data, error } = useSWR<Categories[]>(`${process.env.NEXT_PUBLIC_PUBLIC_URL}${url}`, config)
+    const { data, error } = useSWR<Categories>(`${process.env.NEXT_PUBLIC_PUBLIC_URL}${url}`, config)
 
     return {
-        category: data || [],
+        category: data || null,
         isLoading: !error && !data,
         isError: error,
     }

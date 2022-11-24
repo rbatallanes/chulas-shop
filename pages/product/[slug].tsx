@@ -1,6 +1,11 @@
-import { Box, Button, Chip, Grid, Typography } from '@mui/material'
 import { NextPage } from 'next'
+import { GetStaticPaths } from 'next'
+import { GetStaticProps } from 'next'
+import { GetServerSideProps } from 'next'
+
 import { useRouter } from 'next/router'
+import { shopApi } from '../../api'
+
 import { ShopLayout } from '../../components/layouts'
 import { ProductSlideshow, SizeSelector } from '../../components/products'
 import { ItemCounter } from '../../components/ui'
@@ -8,8 +13,7 @@ import { initialData } from '../../database/products'
 import { useArticles } from '../../hooks'
 import { Article } from '../../interfaces'
 
-import { GetServerSideProps } from 'next'
-import { shopApi } from '../../api'
+import { Box, Button, Chip, Grid, Typography } from '@mui/material'
 
 //const product = initialData.products[0]
 
@@ -72,17 +76,52 @@ const ProductPage: NextPage<Props> = ({product}) => {
 // - Only if you need to pre-render a page whose data must be fetched at request time
 
 
-export const getServerSideProps: GetServerSideProps = async ({params}) => {
+// export const getServerSideProps: GetServerSideProps = async ({params}) => {
 
-  const {slug} = params as {slug: string}
+//   const {slug} = params as {slug: string}
 
-  const { data:product } = await  shopApi.get<Article>(`/articles/slug/${slug}`)
+//   const { data:product } = await  shopApi.get<Article>(`/articles/slug/${slug}`)
   
+//   if(!product){
+//     return{
+//       redirect:{
+//         destination:'/',
+//         permanent:false
+//       }
+//     }
+//   }
+
+//   return {
+//     props: {
+//       product
+//     }
+//   }
+// }
+
+
+
+
+export const getStaticPaths: GetStaticPaths = async (ctx) => {
+  const { data } = await  shopApi.get<Article[]>(`/articles`)
+
+  return {
+    paths: data.map(article=>({
+      params: {slug : article.slug}
+    })),
+    fallback: "blocking"
+  }
+}
+
+
+export const getStaticProps: GetStaticProps = async ({params}) => {
+  const {slug} = params as {slug: string}
+  const { data:product } = await  shopApi.get<Article>(`/articles/slug/${slug}`)
+
   if(!product){
     return{
-      redirect:{
-        destination:'/',
-        permanent:false
+      redirect: {
+        destination: '/',
+        permanent: false
       }
     }
   }
@@ -90,8 +129,10 @@ export const getServerSideProps: GetServerSideProps = async ({params}) => {
   return {
     props: {
       product
-    }
+    },
+    revalidate: 86400,
   }
 }
+
 
 export default ProductPage
