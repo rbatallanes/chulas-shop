@@ -22,6 +22,7 @@ export interface Categories {
 export interface Product {
     id:            number;
     brand:         string;
+    slug:          string;
     articles:      Article[];
     admissionDate: Date;
     tags:          string;
@@ -34,7 +35,6 @@ export interface Product {
 export interface Article {
     id:            number;
     title:         string;
-    slug:          string;
     images:        Images[];
     stocks:        Stock[]; //VER
     description:   string;
