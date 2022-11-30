@@ -6,22 +6,24 @@ import { Article, IProduct, Product } from '../../interfaces'
 interface Props{
   //product: IProduct;
   //product: Product;
-  product: any;
+  product: any; //ICustomProduct ???
 }
 
 export const ProductCard: FC<Props> = ({product}) => {
- console.log(product.images);
+
+  const [...images] = !!product.images ? product.images.split(',') : []
 
   const [isHovered, setIsHovered] = useState(false)
   const [setImageLoad, setSetImageLoad] = useState(false)
 
-  // const productImage = useMemo(() => {
-  //   return isHovered 
-  //   // ? `products/${product.images[1]}`
-  //   // : `products/${product.images[0]}`
-  //   // ? `products/${product.images[1].name}`
-  //   // : `products/${product.images[0].name}`
-  // }, [isHovered,product.articles[0].images])
+  const productImage = useMemo(() => {
+    return isHovered 
+    ? `products/${images[1]}` 
+    : `products/${images[0]}`
+    // ? `products/${product.images[1].name}`
+    // : `products/${product.images[0].name}`
+  //}, [isHovered,product.articles[0].images])
+}, [isHovered])
 
   return (
     <Grid item 
@@ -46,9 +48,11 @@ export const ProductCard: FC<Props> = ({product}) => {
                 <CardMedia
                   component={'img'}
                   className='fadeIn'
-                  //image={productImage}
+                  image={images.length>0 ? productImage :  `/products/1740176-00-A_1.jpg`}
+                  //image={images.length > 1 ? }
                   // image={product.images.length>0 ? `/products/${product.images}` :  `/products/1740176-00-A_1.jpg`}
-                  image={product.images !== null ? `/products/${product.images}` :  `/products/1740176-00-A_1.jpg`}
+                  //image={images.length>0 ? `/products/${images[0]}` :  `/products/1740176-00-A_1.jpg`}
+                  //image={images.length>0 ? `/products/${images[0]}` :  `/products/1740176-00-A_1.jpg`}
                   alt={product.brand}
                   onLoad={()=>setSetImageLoad(true)}
                 />

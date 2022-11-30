@@ -11,14 +11,14 @@ import { ProductSlideshow, SizeSelector } from '../../components/products'
 import { ItemCounter } from '../../components/ui'
 import { initialData } from '../../database/products'
 import { useArticles } from '../../hooks'
-import { Article } from '../../interfaces'
+import { Article, Product } from '../../interfaces'
 
 import { Box, Button, Chip, Grid, Typography } from '@mui/material'
 
 //const product = initialData.products[0]
 
 interface Props{
-  product: Article;
+  product: Product;
 }
 
 
@@ -30,32 +30,32 @@ const ProductPage: NextPage<Props> = ({product}) => {
   // if(!article){return <h1>No existe articulo</h1>}
   
   return (
-    <ShopLayout title={product.title} pageDescription={product.description}>
+    <ShopLayout title={product.brand} pageDescription={product.articles[0]?.description}>
       <Grid container spacing={3}>
         <Grid item xs={12} sm={7}>
           {/* SlideShow */}
-          <ProductSlideshow images={product.images}/>
+          <ProductSlideshow articles={product.articles}/>
           {/* <ProductSlideshow/> */}
         </Grid>
         <Grid item xs={12} sm={5}>
           <Box display={'flex'} flexDirection='column'>
             {/* Titulos */}
-            <Typography variant='h1' component={'h1'}>{product.title}</Typography>
-            <Typography variant='subtitle1' component={'h2'}>$ {product.salePrice}</Typography>
+            <Typography variant='h1' component={'h1'}>{product.brand}</Typography>
+            <Typography variant='subtitle1' component={'h2'}>$ {product.articles[0]?.salePrice}</Typography>
 
             {/* cantidad */}
             <Box sx={{my:2}}>
               <Typography variant='subtitle2'>Cantidad</Typography>
               <ItemCounter/>
-              <SizeSelector 
+              {/* <SizeSelector 
                 // selectedSize={product.sizes[2]} 
-                sizes={product.sizes}/>
+                sizes={product.sizes}/> */}
             </Box>
 
             {/* ADD Cart */}
 
             {
-              product.stocks[0].inStock > 0 
+              product.articles[0]?.stocks[0].inStock > 0 
                 ? (
                     <Button color='secondary' className='circular-btn'>
                       Agregar al carrito
@@ -70,7 +70,7 @@ const ProductPage: NextPage<Props> = ({product}) => {
 
             <Box sx={{mt:3}}>
               <Typography variant='subtitle2'>Descripción</Typography>
-              <Typography variant='body2'>{product.description}</Typography>
+              <Typography variant='body2'>{product.articles[0]?.description}</Typography>
             </Box>
 
           </Box>
@@ -110,11 +110,11 @@ const ProductPage: NextPage<Props> = ({product}) => {
 
 
 export const getStaticPaths: GetStaticPaths = async (ctx) => {
-  const { data } = await  shopApi.get<Article[]>(`/articles`)
+  const { data } = await  shopApi.get<Product[]>(`/products`)
 
   return {
-    paths: data.map(article=>({
-      params: {slug : article.slug}
+    paths: data.map(product=>({
+      params: {slug : product.slug}
     })),
     fallback: "blocking"
   }
@@ -123,7 +123,7 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
 
 export const getStaticProps: GetStaticProps = async ({params}) => {
   const {slug} = params as {slug: string}
-  const { data:product } = await  shopApi.get<Article>(`/articles/slug/${slug}`)
+  const { data:product } = await  shopApi.get<Product>(`/products/slug/${slug}`)
 
   if(!product){
     return{
