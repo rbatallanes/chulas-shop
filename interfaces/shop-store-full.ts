@@ -35,6 +35,7 @@ export interface Product {
 export interface Article {
     id:            number;
     title:         string;
+    articlesSizes: ArticlesSize[];
     images:        Images[];
     stocks:        Stock[]; //VER
     description:   string;
@@ -86,6 +87,15 @@ export interface Colors {
     name:      string;
     code:      string;
     rgb:       string;
+    status:    number;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+export interface ArticlesSize {
+    id:        number;
+    articleId: number;
+    sizes:     Size;
     status:    number;
     createdAt: Date;
     updatedAt: Date;

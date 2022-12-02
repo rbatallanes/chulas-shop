@@ -1,12 +1,12 @@
 import React, { FC, useMemo, useState } from 'react';
 import NextLink from 'next/link';
 import { Box, Card, CardActionArea, CardMedia, Chip, Grid, Link, Typography } from '@mui/material'
-import { Article, IProduct, Product } from '../../interfaces'
+import { Article, ICustomProduct, IProduct, Product } from '../../interfaces'
 
 interface Props{
   //product: IProduct;
   //product: Product;
-  product: any; //ICustomProduct ???
+  product: ICustomProduct; //ICustomProduct ???
 }
 
 export const ProductCard: FC<Props> = ({product}) => {
@@ -23,7 +23,7 @@ export const ProductCard: FC<Props> = ({product}) => {
     // ? `products/${product.images[1].name}`
     // : `products/${product.images[0].name}`
   //}, [isHovered,product.articles[0].images])
-}, [isHovered])
+}, [isHovered,images[0]])
 
   return (
     <Grid item 

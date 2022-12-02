@@ -4,12 +4,13 @@ import { ProductList } from '../components/products'
 import { initialData } from '../database/products'
 import { GetStaticProps, NextPage } from 'next'
 import { shopApi } from '../api'
-import { Article, Product } from '../interfaces'
+import { Article, ICustomProduct, Product } from '../interfaces'
 import { useProducts } from '../hooks'
 import { FullScreenLoading } from '../components/ui'
 
 interface Props{
-  products: Product[]
+  //products: Product[];
+  products: ICustomProduct[];
 }
 
 

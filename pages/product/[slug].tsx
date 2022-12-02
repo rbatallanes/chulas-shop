@@ -7,7 +7,7 @@ import { useRouter } from 'next/router'
 import { shopApi } from '../../api'
 
 import { ShopLayout } from '../../components/layouts'
-import { ProductSlideshow, SizeSelector } from '../../components/products'
+import { ColorSelector, ProductSlideshow, SizeSelector } from '../../components/products'
 import { ItemCounter } from '../../components/ui'
 import { initialData } from '../../database/products'
 import { useArticles } from '../../hooks'
@@ -47,9 +47,11 @@ const ProductPage: NextPage<Props> = ({product}) => {
             <Box sx={{my:2}}>
               <Typography variant='subtitle2'>Cantidad</Typography>
               <ItemCounter/>
-              {/* <SizeSelector 
+              <ColorSelector
+                articles={product.articles}/>
+              <SizeSelector 
                 // selectedSize={product.sizes[2]} 
-                sizes={product.sizes}/> */}
+                articles={product.articles}/>
             </Box>
 
             {/* ADD Cart */}
