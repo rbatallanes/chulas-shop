@@ -1,6 +1,7 @@
-import { Button } from "@mui/material";
-import { Box } from "@mui/system";
-import { FC } from "react";
+
+import { Box,FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from "@mui/material";
+
+import { FC, useState } from "react";
 import { Article, ISize, Size } from "../../interfaces";
 
 interface Props{
@@ -10,48 +11,66 @@ interface Props{
     // sizes: Size;
 
     articles: Article[];
+    onSelectedSize: (size: Size)=> void;
 }
 
-export const SizeSelector: FC<Props> = ({articles}) => {
+export const SizeSelector: FC<Props> = ({articles,onSelectedSize}) => {
+
+    const [size, setSize] = useState('');
 
   return (
-    <Box>
+    // <Box>
+    //     {
+    //         articles.map(article=>(
+
+    //                 article.articlesSizes.map(articleSize=>(
+                        
+    //                         <Button
+    //                             key={articleSize.sizes.id}
+    //                             size="small"
+    //                             //color={selectedSize === size ? 'info':'secondary'}
+    //                         >
+    //                         {articleSize.sizes.name}
+    //                         </Button>
+                        
+    //                 ))
+
+    //         ))
+    //     }
+    // </Box>
+
+    <Box sx={{ minWidth: 120 }}>
+    <FormControl fullWidth>
+      <InputLabel id="demo-simple-select-label">Talle</InputLabel>
+        <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            //value={articleSize.sizes.id}
+            label="Size"
+            
+        >
         {
             articles.map(article=>(
-
-                    article.articlesSizes.map(articleSize=>(
-                        
-                            <Button
-                                key={articleSize.sizes.id}
-                                size="small"
-                                //color={selectedSize === size ? 'info':'secondary'}
-                            >
-                            {articleSize.sizes.name}
-                            </Button>
-                        
+                
+                article.articlesSizes.map(articleSize=>(
+                        <>
+                                <MenuItem
+                                    key={articleSize.sizes.id}
+                                    value={articleSize.sizes.id}
+                                    //size="small"
+                                    //color={selectedSize === size ? 'info':'secondary'}
+                                    onChange={(e)=>onSelectedSize(articleSize.sizes)}
+                                >
+                                {articleSize.sizes.name}
+                                </MenuItem>
+                            
+                        </>
                     ))
-
-            ))
-        }
-
-
-        {/* {sizes.map(size=>(
-            <Button
-                key={size.id}
-                size="small"
-                color={selectedSize === size ? 'info':'secondary'}
-            >
-            {size.name}
-            </Button>
-        ))} */}
-
-        {/* <Button
-                key={sizes.id}
-                size="small"
-                color={selectedSize === sizes ? 'info':'secondary'}
-            >
-            {sizes.name}
-        </Button> */}
-    </Box>
+                    
+                    ))
+                }
+        </Select>
+    </FormControl>
+  </Box>
   )
 }

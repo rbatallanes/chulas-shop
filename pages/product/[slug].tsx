@@ -11,9 +11,10 @@ import { ColorSelector, ProductSlideshow, SizeSelector } from '../../components/
 import { ItemCounter } from '../../components/ui'
 import { initialData } from '../../database/products'
 import { useArticles } from '../../hooks'
-import { Article, Product } from '../../interfaces'
+import { Article, Product, Size } from '../../interfaces'
 
-import { Box, Button, Chip, Grid, Typography } from '@mui/material'
+import { Box, Button, Chip, Grid, SelectChangeEvent, Typography } from '@mui/material'
+import { useState } from 'react'
 
 //const product = initialData.products[0]
 
@@ -28,6 +29,13 @@ const ProductPage: NextPage<Props> = ({product}) => {
   // const {articles:article,isLoading} = useArticles(`/articles/slug/${router.query.slug}`)
   // if(isLoading){return <h1>Cargando...</h1> }
   // if(!article){return <h1>No existe articulo</h1>}
+
+  
+
+  const onSelectedSize = (size:Size) => {
+    //setSize(event.target.value as string);
+    console.log(size);
+  };
   
   return (
     <ShopLayout title={product.brand} pageDescription={product.articles[0]?.description}>
@@ -51,7 +59,10 @@ const ProductPage: NextPage<Props> = ({product}) => {
                 articles={product.articles}/>
               <SizeSelector 
                 // selectedSize={product.sizes[2]} 
-                articles={product.articles}/>
+                articles={product.articles}
+                onSelectedSize={onSelectedSize}
+                />
+
             </Box>
 
             {/* ADD Cart */}
