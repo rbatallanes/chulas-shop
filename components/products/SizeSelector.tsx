@@ -10,65 +10,57 @@ interface Props{
     // selectedSize?: Size;
     // sizes: Size;
 
-    articles: Article[];
-    onSelectedSize: (size: Size)=> void;
+    articles: Article;
+    onSelectedSize: (sizes: SelectChangeEvent)=> void;
+    selectedSize?: string;
 }
 
-export const SizeSelector: FC<Props> = ({articles,onSelectedSize}) => {
+export const SizeSelector: FC<Props> = ({articles,selectedSize,onSelectedSize}) => {
 
+    console.log(articles)
+    
     const [size, setSize] = useState('');
 
+    // const handleSizeSelect = (event: SelectChangeEvent) => {
+    //   console.log('sizeSelector: '+event.target.value as string)
+    //   setSize(event.target.value as string)
+    // };
+
   return (
-    // <Box>
-    //     {
-    //         articles.map(article=>(
 
-    //                 article.articlesSizes.map(articleSize=>(
-                        
-    //                         <Button
-    //                             key={articleSize.sizes.id}
-    //                             size="small"
-    //                             //color={selectedSize === size ? 'info':'secondary'}
-    //                         >
-    //                         {articleSize.sizes.name}
-    //                         </Button>
-                        
-    //                 ))
-
-    //         ))
-    //     }
-    // </Box>
-
-    <Box sx={{ minWidth: 120 }}>
+    <Box sx={{ minWidth: 60 }}>
     <FormControl fullWidth>
       <InputLabel id="demo-simple-select-label">Talle</InputLabel>
         <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            //value={articleSize.sizes.id}
+            //value={size}
+            value={selectedSize}
+            // onChange={(e)=>
+            //   (setSize(articleSize.sizes.id),
+            //   handleSizeSelect(articleSize.sizes.id))
+            // }
+            //onChange={handleSizeSelect}
+            onChange={onSelectedSize}
             label="Size"
             
         >
-        {
-            articles.map(article=>(
-                
-                article.articlesSizes.map(articleSize=>(
-                        <>
+        
+        {   
+            articles.articlesSizes.map((articleSize,idx)=>(
                                 <MenuItem
-                                    key={articleSize.sizes.id}
-                                    value={articleSize.sizes.id}
+                                    key={idx}
+                                    value={articleSize.id}
                                     //size="small"
                                     //color={selectedSize === size ? 'info':'secondary'}
-                                    onChange={(e)=>onSelectedSize(articleSize.sizes)}
+                                    //onChange={(e)=>onSelectedSize(articleSize.sizes)}
+                                    
                                 >
                                 {articleSize.sizes.name}
                                 </MenuItem>
-                            
-                        </>
                     ))
                     
-                    ))
-                }
+                  }
         </Select>
     </FormControl>
   </Box>

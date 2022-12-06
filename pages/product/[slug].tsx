@@ -11,7 +11,7 @@ import { ColorSelector, ProductSlideshow, SizeSelector } from '../../components/
 import { ItemCounter } from '../../components/ui'
 import { initialData } from '../../database/products'
 import { useArticles } from '../../hooks'
-import { Article, Product, Size } from '../../interfaces'
+import { Article, ICartArticle, Product, Size } from '../../interfaces'
 
 import { Box, Button, Chip, Grid, SelectChangeEvent, Typography } from '@mui/material'
 import { useState } from 'react'
@@ -29,12 +29,42 @@ const ProductPage: NextPage<Props> = ({product}) => {
   // const {articles:article,isLoading} = useArticles(`/articles/slug/${router.query.slug}`)
   // if(isLoading){return <h1>Cargando...</h1> }
   // if(!article){return <h1>No existe articulo</h1>}
+  const [sizeId, setsizeId] = useState(0)
 
-  
+  const [tempCartArticle, settempCartArticle] = useState<ICartArticle>({
+    id: product.id,
+    title: product.articles[0]?.title,
+    articlesSizes: product.articles[0]?.articlesSizes,
+    images: product.articles[0]?.images,
+    stocks: product.articles[0]?.stocks,
+    description: product.articles[0]?.description,
+    admissionDate: product.articles[0]?.admissionDate,
+    purchasePrice: product.articles[0]?.purchasePrice,
+    salePrice: product.articles[0]?.salePrice,
+    sizes: undefined,
+    genders: product.articles[0]?.genders,
+    colors: undefined,//product.articles[0]?.colors,
+    status: product.status,
+    quantity: 2,
+  })
 
-  const onSelectedSize = (size:Size) => {
-    //setSize(event.target.value as string);
-    console.log(size);
+  const onSelectedColor = (colors:number,artId:number) => {
+    console.log('En Padre '+ colors);
+    settempCartArticle(currentArticle=>({
+      ...tempCartArticle,
+      colors,
+      sizes:undefined, 
+    }))
+    setsizeId(artId)  // cambia el valor del select
+  };
+
+  const onSelectedSize = (sizes: SelectChangeEvent) => {
+    console.log('sizeSelector: '+sizes.target.value as string)
+    settempCartArticle(currentArticle=>({
+      ...tempCartArticle,
+      sizes: sizes.target.value as string
+    }))
+
   };
   
   return (
@@ -54,12 +84,19 @@ const ProductPage: NextPage<Props> = ({product}) => {
             {/* cantidad */}
             <Box sx={{my:2}}>
               <Typography variant='subtitle2'>Cantidad</Typography>
-              <ItemCounter/>
+              <ItemCounter
+                currentValue={tempCartArticle.quantity}
+                //updateQuantity={2}
+                maxValue={tempCartArticle.stocks[0]}
+              />
               <ColorSelector
-                articles={product.articles}/>
-              <SizeSelector 
-                // selectedSize={product.sizes[2]} 
                 articles={product.articles}
+                selectedColor={tempCartArticle.colors} 
+                onSelectedColor={onSelectedColor}
+              />
+              <SizeSelector 
+                selectedSize={tempCartArticle.sizes} 
+                articles={product.articles[`${sizeId}`]}  //VERIFICAR 
                 onSelectedSize={onSelectedSize}
                 />
 
@@ -70,8 +107,11 @@ const ProductPage: NextPage<Props> = ({product}) => {
             {
               product.articles[0]?.stocks[0].inStock > 0 
                 ? (
-                    <Button color='secondary' className='circular-btn'>
-                      Agregar al carrito
+                    <Button color='info' className='circular-btn'>
+                      {  tempCartArticle.colors 
+                          ? tempCartArticle.sizes ? 'Agregar al carrito' :'Seleccione un talle'
+                          : 'Seleccione un color'
+                        }
                     </Button>
                   )
                 :(
