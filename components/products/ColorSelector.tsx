@@ -14,25 +14,30 @@ interface Props{
 export const ColorSelector: FC<Props> = ({articles,selectedColor,onSelectedColor}) => {
 
     return (
-        <Box sx={{my:2}}>
+        <Box >
             { articles.map((article,idx)=>(
-                <IconButton
-                    key={article.id}
-                    //className='fadeIn'
-                    onClick={()=>onSelectedColor(article.colors.id,idx)}
-                >
-                    <Fab 
-                        size="small" 
-                        sx={{
-                        backgroundColor: `${article.colors.code}`,
-                    }}>
-                    {
-                        selectedColor === article.colors.id
-                        ? <DoneOutlineOutlinedIcon sx={{ color: red[200] }} />
-                        : null
-                    }
-                    </Fab>                       
-                </IconButton>  
+                <>
+                    <h3>{article.id}</h3>
+                    <IconButton
+                        key={article.id}
+                        //className='fadeIn'
+                        onClick={()=>{onSelectedColor(article.colors.id,idx),console.log(article);
+                        }}
+                    >
+                        <Fab 
+                            size="small" 
+                            sx={{
+                            backgroundColor: `${article.colors.code}`,
+                        }}>
+                        {
+                            selectedColor === article.colors.id
+                            ? <DoneOutlineOutlinedIcon sx={{ color: red[200] }} />
+                            : null
+                        }
+                        </Fab>                       
+                    </IconButton>  
+                
+                </>
                 ))
             }                   
         </Box>

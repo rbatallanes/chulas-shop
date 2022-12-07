@@ -28,7 +28,7 @@ export const SizeSelector: FC<Props> = ({articles,selectedSize,onSelectedSize}) 
 
   return (
 
-    <Box sx={{ minWidth: 60 }}>
+    <Box sx={{ minWidth: 60,my:3 }}>
     <FormControl fullWidth>
       <InputLabel id="demo-simple-select-label">Talle</InputLabel>
         <Select

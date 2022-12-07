@@ -32,6 +32,9 @@ const ProductPage: NextPage<Props> = ({product}) => {
   const [sizeId, setsizeId] = useState(0)
 
   const [tempCartArticle, settempCartArticle] = useState<ICartArticle>({
+
+    // SET POR IPRODUCT Y EL ARTICLE: UNDEFINED 
+
     id: product.id,
     title: product.articles[0]?.title,
     articlesSizes: product.articles[0]?.articlesSizes,
@@ -52,8 +55,12 @@ const ProductPage: NextPage<Props> = ({product}) => {
     console.log('En Padre '+ colors);
     settempCartArticle(currentArticle=>({
       ...tempCartArticle,
+      
+      //ARTICLES
+      
       colors,
       sizes:undefined, 
+
     }))
     setsizeId(artId)  // cambia el valor del select
   };
@@ -66,13 +73,33 @@ const ProductPage: NextPage<Props> = ({product}) => {
     }))
 
   };
+
+  const updateQuantity =(quantity:number)=>{
+
+    // quantity > 0 && quantity<= tempCartArticle.stocks[0].inStock 
+    //   ? settempCartArticle(currentArticle=>({
+    //     ...tempCartArticle,
+    //     quantity
+    //   }))
+    //   : console.log('Valor mayor')
+
+    settempCartArticle(currentArticle=>({
+          ...tempCartArticle,
+          quantity
+        }))
+  }
+
+  const onAddArticle=()=>{
+    console.log(tempCartArticle)
+    
+  }
   
   return (
     <ShopLayout title={product.brand} pageDescription={product.articles[0]?.description}>
       <Grid container spacing={3}>
         <Grid item xs={12} sm={7}>
           {/* SlideShow */}
-          <ProductSlideshow articles={product.articles}/>
+          <ProductSlideshow articles={product.articles}/> {/* tempCartArticle.articles */}
           {/* <ProductSlideshow/> */}
         </Grid>
         <Grid item xs={12} sm={5}>
@@ -83,12 +110,7 @@ const ProductPage: NextPage<Props> = ({product}) => {
 
             {/* cantidad */}
             <Box sx={{my:2}}>
-              <Typography variant='subtitle2'>Cantidad</Typography>
-              <ItemCounter
-                currentValue={tempCartArticle.quantity}
-                //updateQuantity={2}
-                maxValue={tempCartArticle.stocks[0]}
-              />
+            <Typography variant='subtitle2'>Color</Typography>
               <ColorSelector
                 articles={product.articles}
                 selectedColor={tempCartArticle.colors} 
@@ -99,6 +121,12 @@ const ProductPage: NextPage<Props> = ({product}) => {
                 articles={product.articles[`${sizeId}`]}  //VERIFICAR 
                 onSelectedSize={onSelectedSize}
                 />
+              <Typography variant='subtitle2'>Cantidad</Typography>
+              <ItemCounter
+                currentValue={tempCartArticle.quantity}
+                updateQuantity={updateQuantity}
+                maxValue={tempCartArticle.stocks[0]}
+              />
 
             </Box>
 
@@ -107,7 +135,12 @@ const ProductPage: NextPage<Props> = ({product}) => {
             {
               product.articles[0]?.stocks[0].inStock > 0 
                 ? (
-                    <Button color='info' className='circular-btn'>
+                    <Button 
+                      color='secondary' 
+                      className='circular-btn'
+                      onClick={onAddArticle}
+                      variant="outlined"
+                    >
                       {  tempCartArticle.colors 
                           ? tempCartArticle.sizes ? 'Agregar al carrito' :'Seleccione un talle'
                           : 'Seleccione un color'
@@ -123,7 +156,7 @@ const ProductPage: NextPage<Props> = ({product}) => {
 
             <Box sx={{mt:3}}>
               <Typography variant='subtitle2'>Descripción</Typography>
-              <Typography variant='body2'>{product.articles[0]?.description}</Typography>
+              <Typography variant='body2'>{product.articles[0]?.description}</Typography> {/* tempCartArticle.articles */}
             </Box>
 
           </Box>
