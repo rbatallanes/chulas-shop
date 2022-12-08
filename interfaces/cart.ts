@@ -1,4 +1,17 @@
-import { ArticlesSize, Colors, Gender, Images, Size, Stock } from "./";
+import { Article, ArticlesSize, Colors, Gender, Images, Size, Stock } from "./";
+
+
+export interface IProduct {
+    id:             number;
+    brand:          string;
+    slug:           string;
+    articles?:       Article;
+    admissionDate:  Date;
+    tags:           string;
+    status:         number;
+    quantity:       number;
+}
+
 
 export interface ICartArticle {
     id:             number;

@@ -8,7 +8,7 @@ import DoneOutlineOutlinedIcon from '@mui/icons-material/DoneOutlineOutlined';
 interface Props{
     articles: Article[];
     selectedColor?: number;
-    onSelectedColor: (id:number,artId:number)=> void;
+    onSelectedColor: (articles: Article)=> void;
 }
 
 export const ColorSelector: FC<Props> = ({articles,selectedColor,onSelectedColor}) => {
@@ -21,7 +21,7 @@ export const ColorSelector: FC<Props> = ({articles,selectedColor,onSelectedColor
                     <IconButton
                         key={article.id}
                         //className='fadeIn'
-                        onClick={()=>{onSelectedColor(article.colors.id,idx),console.log(article);
+                        onClick={()=>{onSelectedColor(article),console.log(article);
                         }}
                     >
                         <Fab 

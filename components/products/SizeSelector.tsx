@@ -2,7 +2,7 @@
 import { Box,FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from "@mui/material";
 
 import { FC, useState } from "react";
-import { Article, ISize, Size } from "../../interfaces";
+import { Article, ArticlesSize, ISize, Size } from "../../interfaces";
 
 interface Props{
     // selectedSize?: ISize;
@@ -10,21 +10,31 @@ interface Props{
     // selectedSize?: Size;
     // sizes: Size;
 
-    articles: Article;
-    onSelectedSize: (sizes: SelectChangeEvent)=> void;
+    articles?: Article[];
+    //articlesSizes?: ArticlesSize[];
+    onSelectedSize?: (sizes: SelectChangeEvent)=> void;
+    //onSelectedSize: (sizes: ArticlesSize)=> void;
     selectedSize?: string;
 }
 
 export const SizeSelector: FC<Props> = ({articles,selectedSize,onSelectedSize}) => {
 
-    console.log(articles)
+  
     
-    const [size, setSize] = useState('');
+    //const [size, setSize] = useState('');
 
-    // const handleSizeSelect = (event: SelectChangeEvent) => {
-    //   console.log('sizeSelector: '+event.target.value as string)
-    //   setSize(event.target.value as string)
-    // };
+    const handleSizeSelect = (event: SelectChangeEvent) => {
+      console.log('sizeSelector: '+event.target.value as string)
+      
+      // ARTICLES.REDUCE-----
+      //const newArticleSize = articles?.reduce(article=>article.articlesSizes.id)
+
+
+
+
+      //setSize(event.target.value as string)
+    };
+
 
   return (
 
@@ -40,27 +50,33 @@ export const SizeSelector: FC<Props> = ({articles,selectedSize,onSelectedSize}) 
             //   (setSize(articleSize.sizes.id),
             //   handleSizeSelect(articleSize.sizes.id))
             // }
-            //onChange={handleSizeSelect}
-            onChange={onSelectedSize}
+            onChange={handleSizeSelect}
+            //onChange={onSelectedSize}
             label="Size"
             
         >
         
-        {   
-            articles.articlesSizes.map((articleSize,idx)=>(
-                                <MenuItem
-                                    key={idx}
-                                    value={articleSize.id}
-                                    //size="small"
-                                    //color={selectedSize === size ? 'info':'secondary'}
-                                    //onChange={(e)=>onSelectedSize(articleSize.sizes)}
-                                    
-                                >
-                                {articleSize.sizes.name}
-                                </MenuItem>
-                    ))
+            {   
+              articles?.map(article=>(
+                
+                article.articlesSizes.map((articleSize,idx)=>(
+                                    <MenuItem
+                                        key={idx}
+                                        value={articleSize.id}
+                                        //size="small"
+                                        //color={selectedSize === size ? 'info':'secondary'}
+                                        //onChange={(e)=>onSelectedSize(articleSize.sizes)}
+                                        
+                                    >
+                                    {articleSize.sizes.name}
+                                    </MenuItem>
+                        ))
+              ))
+
+              
+            
                     
-                  }
+            }
         </Select>
     </FormControl>
   </Box>

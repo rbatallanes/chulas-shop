@@ -11,7 +11,7 @@ import { ColorSelector, ProductSlideshow, SizeSelector } from '../../components/
 import { ItemCounter } from '../../components/ui'
 import { initialData } from '../../database/products'
 import { useArticles } from '../../hooks'
-import { Article, ICartArticle, Product, Size } from '../../interfaces'
+import { Article, ArticlesSize, IProduct, Product, Size } from '../../interfaces'
 
 import { Box, Button, Chip, Grid, SelectChangeEvent, Typography } from '@mui/material'
 import { useState } from 'react'
@@ -31,45 +31,42 @@ const ProductPage: NextPage<Props> = ({product}) => {
   // if(!article){return <h1>No existe articulo</h1>}
   const [sizeId, setsizeId] = useState(0)
 
-  const [tempCartArticle, settempCartArticle] = useState<ICartArticle>({
+  const [tempCartArticle, settempCartArticle] = useState<IProduct>({
 
     // SET POR IPRODUCT Y EL ARTICLE: UNDEFINED 
 
     id: product.id,
-    title: product.articles[0]?.title,
-    articlesSizes: product.articles[0]?.articlesSizes,
-    images: product.articles[0]?.images,
-    stocks: product.articles[0]?.stocks,
-    description: product.articles[0]?.description,
-    admissionDate: product.articles[0]?.admissionDate,
-    purchasePrice: product.articles[0]?.purchasePrice,
-    salePrice: product.articles[0]?.salePrice,
-    sizes: undefined,
-    genders: product.articles[0]?.genders,
-    colors: undefined,//product.articles[0]?.colors,
+    brand: product.brand,
+    slug: product.slug,
+    articles: undefined,
+    admissionDate: product.admissionDate,
+    tags: product.tags,
     status: product.status,
     quantity: 2,
   })
 
-  const onSelectedColor = (colors:number,artId:number) => {
-    console.log('En Padre '+ colors);
+  const onSelectedColor = (articles: Article) => {
+    console.log('En Padre '+ {articles});
     settempCartArticle(currentArticle=>({
-      ...tempCartArticle,
+      ...currentArticle,
       
       //ARTICLES
-      
-      colors,
-      sizes:undefined, 
+      articles,
+      // colors,
+      // sizes:undefined, 
 
     }))
-    setsizeId(artId)  // cambia el valor del select
+    //setsizeId(artId)  // cambia el valor del select
   };
 
-  const onSelectedSize = (sizes: SelectChangeEvent) => {
-    console.log('sizeSelector: '+sizes.target.value as string)
+  //const onSelectedSize = (sizes: SelectChangeEvent) => {
+  const onSelectedSize = (sizes: ArticlesSize) => {
+    //console.log('sizeSelector: '+sizes.target.value as string)
+    console.log(sizes);
+    
     settempCartArticle(currentArticle=>({
-      ...tempCartArticle,
-      sizes: sizes.target.value as string
+      ...currentArticle,
+      //sizes: sizes.target.value as string
     }))
 
   };
@@ -113,20 +110,21 @@ const ProductPage: NextPage<Props> = ({product}) => {
             <Typography variant='subtitle2'>Color</Typography>
               <ColorSelector
                 articles={product.articles}
-                selectedColor={tempCartArticle.colors} 
+                selectedColor={tempCartArticle.articles?.colors.id} 
                 onSelectedColor={onSelectedColor}
               />
               <SizeSelector 
-                selectedSize={tempCartArticle.sizes} 
-                articles={product.articles[`${sizeId}`]}  //VERIFICAR 
-                onSelectedSize={onSelectedSize}
+                // articles={product.articles[`${sizeId}`]}  //VERIFICAR 
+                articles={product.articles}  //VERIFICAR 
+                //selectedSize={tempCartArticle.sizes} 
+                //onSelectedSize={onSelectedSize}
                 />
-              <Typography variant='subtitle2'>Cantidad</Typography>
+              {/* <Typography variant='subtitle2'>Cantidad</Typography>
               <ItemCounter
                 currentValue={tempCartArticle.quantity}
                 updateQuantity={updateQuantity}
-                maxValue={tempCartArticle.stocks[0]}
-              />
+                maxValue={tempCartArticle.stocks[0]} 
+              /> */}
 
             </Box>
 
@@ -141,10 +139,11 @@ const ProductPage: NextPage<Props> = ({product}) => {
                       onClick={onAddArticle}
                       variant="outlined"
                     >
-                      {  tempCartArticle.colors 
+                      {/* {  tempCartArticle.colors 
                           ? tempCartArticle.sizes ? 'Agregar al carrito' :'Seleccione un talle'
                           : 'Seleccione un color'
-                        }
+                        } */}
+                        Agregar al carrito
                     </Button>
                   )
                 :(
