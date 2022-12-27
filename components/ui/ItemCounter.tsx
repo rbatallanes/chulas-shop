@@ -9,16 +9,19 @@ import { Stock } from "../../interfaces";
 interface Props{
   currentValue: number;
   // updateQuantity: number;
-  maxValue: Stock;
+  //stock?: Stock;
+  inStock: number;
   updateQuantity:(quantity:number)=>void;
+  isSize: boolean;
 }
 
 
 
-export const ItemCounter: FC<Props> = ({currentValue,updateQuantity,maxValue}) => {
+export const ItemCounter: FC<Props> = ({currentValue,updateQuantity,inStock,isSize}) => {
 
   // const [updateQuantity, setUpdateQuantity] = useState(currentValue)
-  // console.log(updateQuantity)
+  
+  //const [inStock, setInStock] = useState(maxValue?.inStock) //!!maxValue && maxValue.inStock
 
   // const handleDecrement=()=>{
   //   (updateQuantity-1) > 0
@@ -32,7 +35,7 @@ export const ItemCounter: FC<Props> = ({currentValue,updateQuantity,maxValue}) =
       return updateQuantity(currentValue-1)
     }
 
-    if(currentValue >= maxValue.inStock) return;
+    if(currentValue >= inStock) return; // inStock = false
 
     updateQuantity(currentValue+1)
     
@@ -41,7 +44,7 @@ export const ItemCounter: FC<Props> = ({currentValue,updateQuantity,maxValue}) =
   return (
     <Box display={'flex'} alignItems='center'>
         <IconButton
-          disabled={currentValue === 1 ? true : false}
+          disabled={(currentValue === 1 && isSize) ? true : false}
           // onClick={handleDecrement}
           onClick={()=>addOrRemove(-1)}
         >
@@ -49,19 +52,21 @@ export const ItemCounter: FC<Props> = ({currentValue,updateQuantity,maxValue}) =
         </IconButton>
         <Typography sx={{width:40,textAlign:'center'}}>{currentValue}</Typography>
         <IconButton
-          disabled={currentValue === maxValue.inStock ? true : false}
+          disabled={(currentValue === inStock && isSize) ? true : false}
           // onClick={handleIncrement}
           onClick={()=>addOrRemove(+1)}
         >
             <AddCircleOutline/>
         </IconButton>
-        <Chip 
-          sx={{mx:1}}
-          label={`Stock: ${maxValue.inStock}`} 
-          color="primary"
-          variant="outlined"
-          icon={<CheckroomOutlinedIcon />}
-        />
+        {(inStock>0 && isSize) &&
+          <Chip 
+            sx={{mx:1}}
+            label={`Stock: ${inStock}`} 
+            color="primary"
+            variant="outlined"
+            icon={<CheckroomOutlinedIcon />}
+          />
+        }
     </Box>
   )
 }

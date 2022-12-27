@@ -1,39 +1,64 @@
 
 import { Box,FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from "@mui/material";
 
-import { FC, useState } from "react";
-import { Article, ArticlesSize, ISize, Size } from "../../interfaces";
+import { FC, useEffect, useState } from "react";
+import { Article, ArticlesSize, ICartArticle, ISize, Size } from "../../interfaces";
 
 interface Props{
-    // selectedSize?: ISize;
-    // sizes: ISize[];
-    // selectedSize?: Size;
-    // sizes: Size;
 
-    articles?: Article[];
-    //articlesSizes?: ArticlesSize[];
-    onSelectedSize?: (sizes: SelectChangeEvent)=> void;
-    //onSelectedSize: (sizes: ArticlesSize)=> void;
-    selectedSize?: string;
+    article: Article;
+    onSelectedSize: (article: Article)=> void;
+
 }
 
-export const SizeSelector: FC<Props> = ({articles,selectedSize,onSelectedSize}) => {
+export const SizeSelector: FC<Props> = ({article,onSelectedSize}) => {
 
   
     
-    //const [size, setSize] = useState('');
+    const [articulo, setArticulo] = useState<Article>();
+    const [size, setSize] = useState(0)
 
     const handleSizeSelect = (event: SelectChangeEvent) => {
       console.log('sizeSelector: '+event.target.value as string)
+      //setSize(parseInt(event.target.value))
+
+      const newArticleSize = article?.articlesSizes?.filter(articleSize=>(articleSize.id === parseInt(event.target.value)))
+
+      setArticulo({
+        id: article.id,
+        title: article.title,
+        articlesSizes: newArticleSize,
+        images: article.images,
+        //stocks: article.stocks,
+        description: article.description,
+        admissionDate: article.admissionDate,
+        purchasePrice: article.purchasePrice,
+        salePrice: article.salePrice,
+        //sizes: article.sizes,
+        genders: article.genders,
+        colors: article.colors,
+        status: article.status,
+      })
       
-      // ARTICLES.REDUCE-----
-      //const newArticleSize = articles?.reduce(article=>article.articlesSizes.id)
 
+      //articulo && onSelectedSize(articulo)
 
-
-
-      //setSize(event.target.value as string)
     };
+
+    useEffect(() => {
+      console.log('useEffect');
+      console.log(articulo)
+      articulo && onSelectedSize(articulo)
+
+    }, [articulo])
+    
+
+    const onChangeSizeSelector=()=>{
+      console.log('a');
+
+
+      
+    }
 
 
   return (
@@ -45,7 +70,7 @@ export const SizeSelector: FC<Props> = ({articles,selectedSize,onSelectedSize}) 
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             //value={size}
-            value={selectedSize}
+            //value={selectedSize}
             // onChange={(e)=>
             //   (setSize(articleSize.sizes.id),
             //   handleSizeSelect(articleSize.sizes.id))
@@ -57,21 +82,22 @@ export const SizeSelector: FC<Props> = ({articles,selectedSize,onSelectedSize}) 
         >
         
             {   
-              articles?.map(article=>(
+              //articles?.map(article=>(
                 
-                article.articlesSizes.map((articleSize,idx)=>(
+                article.articlesSizes?.map((articleSize,idx)=>(
+                                  
                                     <MenuItem
                                         key={idx}
                                         value={articleSize.id}
                                         //size="small"
                                         //color={selectedSize === size ? 'info':'secondary'}
                                         //onChange={(e)=>onSelectedSize(articleSize.sizes)}
-                                        
                                     >
                                     {articleSize.sizes.name}
                                     </MenuItem>
+
                         ))
-              ))
+              //))
 
               
             

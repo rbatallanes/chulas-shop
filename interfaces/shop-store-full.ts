@@ -6,7 +6,6 @@ export interface Items {
     createdAt:   Date;
     updatedAt:   Date;
     products?:   Product[];
-    inStock?:    number;
 }
 
 export interface Categories {
@@ -16,7 +15,6 @@ export interface Categories {
     status:    number;
     createdAt: Date;
     updatedAt: Date;
-    inStock?:  number;
 }
 
 export interface Product {
@@ -37,17 +35,17 @@ export interface Article {
     title:         string;
     articlesSizes: ArticlesSize[];
     images:        Images[];
-    stocks:        Stock[]; //VER
+    //stocks:        Stock[]; //VER
     description:   string;
     admissionDate: Date;
     purchasePrice: number;
     salePrice:     number;
-    sizes:         Size;
+    //sizes:         Size;
     genders:       Gender;
     colors:        Colors;
     status:        number;
-    createdAt:     Date;
-    updatedAt:     Date;
+    // createdAt:     Date;
+    // updatedAt:     Date;
 }
 
 export interface Images {
@@ -59,11 +57,12 @@ export interface Images {
 }
 
 export interface Stock {
-    id:        number;
-    inStock:   number;
-    status:    number;
-    createdAt: Date;
-    updatedAt: Date;
+    id:             number;
+    articleSizeId:  number;
+    inStock:        number;
+    status:         number;
+    createdAt:      Date;
+    updatedAt:      Date;
 }
 
 export interface Size {
@@ -94,6 +93,7 @@ export interface Colors {
 
 export interface ArticlesSize {
     id:        number;
+    stocks:    Stock[]; //VER
     articleId: number;
     sizes:     Size;
     status:    number;

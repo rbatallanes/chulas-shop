@@ -5,7 +5,7 @@ export interface IProduct {
     id:             number;
     brand:          string;
     slug:           string;
-    articles?:       Article;
+    article?:       Article;
     admissionDate:  Date;
     tags:           string;
     status:         number;
@@ -16,16 +16,14 @@ export interface IProduct {
 export interface ICartArticle {
     id:             number;
     title:          string;
-    articlesSizes:  ArticlesSize[];
+    articlesSizes?:  ArticlesSize;
     images:         Images[];
-    stocks:         Stock[]; //VER
     description:    string;
     admissionDate:  Date;
     purchasePrice:  number;
     salePrice:      number;
-    sizes?:         string; //Size;
+    //sizes?:         Size; //Size;
     genders:        Gender;
-    colors?:        number; //Colors;
+    colors?:        Colors; //Colors;
     status:         number;
-    quantity:       number;
 }

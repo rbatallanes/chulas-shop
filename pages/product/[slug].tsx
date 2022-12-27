@@ -14,14 +14,13 @@ import { useArticles } from '../../hooks'
 import { Article, ArticlesSize, IProduct, Product, Size } from '../../interfaces'
 
 import { Box, Button, Chip, Grid, SelectChangeEvent, Typography } from '@mui/material'
-import { useState } from 'react'
-
-//const product = initialData.products[0]
+import { useContext, useState } from 'react'
+import { Router } from '@mui/icons-material'
+import { CartContext } from '../../context'
 
 interface Props{
   product: Product;
 }
-
 
 const ProductPage: NextPage<Props> = ({product}) => {
 
@@ -29,8 +28,11 @@ const ProductPage: NextPage<Props> = ({product}) => {
   // const {articles:article,isLoading} = useArticles(`/articles/slug/${router.query.slug}`)
   // if(isLoading){return <h1>Cargando...</h1> }
   // if(!article){return <h1>No existe articulo</h1>}
-  const [sizeId, setsizeId] = useState(0)
 
+  const router = useRouter()
+  const {addArticleToCart} = useContext(CartContext)
+  const [articleId, setArticleId] = useState(0)
+  const [isSize, setIsSize] = useState(false)
   const [tempCartArticle, settempCartArticle] = useState<IProduct>({
 
     // SET POR IPRODUCT Y EL ARTICLE: UNDEFINED 
@@ -38,57 +40,56 @@ const ProductPage: NextPage<Props> = ({product}) => {
     id: product.id,
     brand: product.brand,
     slug: product.slug,
-    articles: undefined,
+    article: undefined,
     admissionDate: product.admissionDate,
     tags: product.tags,
     status: product.status,
-    quantity: 2,
+    quantity: 1,
   })
 
-  const onSelectedColor = (articles: Article) => {
-    console.log('En Padre '+ {articles});
+  const onSelectedColor = (article: Article,artId:number) => {
+    //console.log('En Padre '+ {article});
+    
     settempCartArticle(currentArticle=>({
       ...currentArticle,
       
       //ARTICLES
-      articles,
+      article,
       // colors,
       // sizes:undefined, 
 
     }))
-    //setsizeId(artId)  // cambia el valor del select
+    setArticleId(artId)  // cambia el valor del select
+    setIsSize(false)
+    updateQuantity(1)
   };
 
-  //const onSelectedSize = (sizes: SelectChangeEvent) => {
-  const onSelectedSize = (sizes: ArticlesSize) => {
-    //console.log('sizeSelector: '+sizes.target.value as string)
-    console.log(sizes);
-    
+
+  const onSelectedSize = (article: Article) => {
+
     settempCartArticle(currentArticle=>({
       ...currentArticle,
-      //sizes: sizes.target.value as string
+      article
     }))
-
+    setIsSize(true)
+    updateQuantity(1)
   };
 
   const updateQuantity =(quantity:number)=>{
 
-    // quantity > 0 && quantity<= tempCartArticle.stocks[0].inStock 
-    //   ? settempCartArticle(currentArticle=>({
-    //     ...tempCartArticle,
-    //     quantity
-    //   }))
-    //   : console.log('Valor mayor')
-
     settempCartArticle(currentArticle=>({
-          ...tempCartArticle,
+          ...currentArticle,
           quantity
         }))
   }
 
   const onAddArticle=()=>{
-    console.log(tempCartArticle)
-    
+
+    if (!tempCartArticle.article || tempCartArticle.article?.articlesSizes.length > 1) {return;}
+
+    //console.log(tempCartArticle)
+    addArticleToCart(tempCartArticle)
+    router.push('/cart')
   }
   
   return (
@@ -110,28 +111,34 @@ const ProductPage: NextPage<Props> = ({product}) => {
             <Typography variant='subtitle2'>Color</Typography>
               <ColorSelector
                 articles={product.articles}
-                selectedColor={tempCartArticle.articles?.colors.id} 
+                selectedColor={tempCartArticle.article?.colors.id} 
                 onSelectedColor={onSelectedColor}
               />
+              
               <SizeSelector 
-                // articles={product.articles[`${sizeId}`]}  //VERIFICAR 
-                articles={product.articles}  //VERIFICAR 
-                //selectedSize={tempCartArticle.sizes} 
-                //onSelectedSize={onSelectedSize}
+                article={product.articles[`${articleId}`]}
+                onSelectedSize={onSelectedSize}
                 />
-              {/* <Typography variant='subtitle2'>Cantidad</Typography>
+              <Typography variant='subtitle2'>Cantidad</Typography>
               <ItemCounter
                 currentValue={tempCartArticle.quantity}
                 updateQuantity={updateQuantity}
-                maxValue={tempCartArticle.stocks[0]} 
-              /> */}
+                
+                inStock=
+                {!!tempCartArticle.article 
+                  ? tempCartArticle.article?.articlesSizes[0].stocks[0].inStock 
+                  : 0
+                }
+                isSize={isSize}
+              />
 
             </Box>
 
             {/* ADD Cart */}
 
             {
-              product.articles[0]?.stocks[0].inStock > 0 
+              //product.articles[0]?.stocks[0].inStock > 0 
+              true
                 ? (
                     <Button 
                       color='secondary' 
