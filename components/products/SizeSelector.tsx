@@ -2,7 +2,7 @@
 import { Box,FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from "@mui/material";
 
 import { FC, useEffect, useState } from "react";
-import { Article, ArticlesSize, ICartArticle, ISize, Size } from "../../interfaces";
+import { Article, ArticlesSize, ICartArticle, Size } from "../../interfaces";
 
 interface Props{
 

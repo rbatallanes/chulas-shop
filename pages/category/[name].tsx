@@ -8,7 +8,7 @@ import { useCategory } from '../../hooks'
 
 const CategoryPage = () => {
     const router = useRouter()
-    const {category,isLoading} = useCategory(`/categories/name/${router.query.name}`)
+    const {products,isLoading} = useCategory(`/categories/name/${router.query.name}`)
 
   return (
     <ShopLayout title={'Chulas Shop'} pageDescription={'Encuentra los mejores productos en Chulas Tuc'}>
@@ -18,17 +18,14 @@ const CategoryPage = () => {
       {isLoading
         ? <FullScreenLoading/>
         : <>
-          {!!category 
-            && category.products?.map(product=>(
-              
-              // <h1 key={product.id}>{product.brand}</h1>
-              
-              // product.articles.map(article=>(
-              //   <h1 key={article.id}>{article.title}</h1>
-              // ))
-      
-              <ProductList key={product.id} products={ product.articles} />
-            ))
+          {!!products && 
+            //<h1></h1>
+            // && category.products?.map(product=>(
+                   
+            //   <ProductList key={product.id} products={ product} />
+            // ))
+            
+             <ProductList products={ products} />   // VER INTERFACE ICustomProduct
           }
         </>
       } 

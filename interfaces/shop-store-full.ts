@@ -35,17 +35,13 @@ export interface Article {
     title:         string;
     articlesSizes: ArticlesSize[];
     images:        Images[];
-    //stocks:        Stock[]; //VER
     description:   string;
     admissionDate: Date;
     purchasePrice: number;
     salePrice:     number;
-    //sizes:         Size;
     genders:       Gender;
     colors:        Colors;
     status:        number;
-    // createdAt:     Date;
-    // updatedAt:     Date;
 }
 
 export interface Images {

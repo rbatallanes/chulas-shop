@@ -5,10 +5,18 @@ import { CartContext,cartReducer } from './';
 
 export interface CartState{
    cart: IProduct[];
+   numberOfItems: number;
+   subTotal: number;
+   tax : number;
+   total: number;
 }
 
 const CART_INITIAL_STATE: CartState ={
-   cart: []
+   cart: [],
+   numberOfItems: 0,
+   subTotal:0,
+   tax : 0,
+   total:0,
 }
 
 interface Props{
@@ -31,6 +39,24 @@ useEffect(() => {
 
 useEffect(() => {
    if (state.cart.length > 0)   Cookies.set('cart',JSON.stringify(state.cart))
+}, [state.cart])
+
+useEffect(() => {
+   const numberOfItems  = state.cart.reduce((prev,curr)=> curr.quantity+prev,0)
+   const subTotal       = state.cart.reduce((prev,curr)=> (curr.article!.salePrice * curr.quantity)+prev,0)
+   const taxRate        = Number(process.env.NEXT_PUBLIC_TAX_RATE || 0)
+
+   const orderSummary ={
+      numberOfItems,
+      subTotal,
+      tax : taxRate * subTotal,
+      total: subTotal * (taxRate + 1)
+   }
+
+   console.log({orderSummary});
+
+   dispatch({type: '[Cart] - Update order summary',payload: orderSummary })
+   
 }, [state.cart])
 
 
@@ -67,6 +93,16 @@ const updateCartQuantity =(product: IProduct)=>{
    dispatch({type: '[Cart] - Change cart quantity',payload: product })
 }
 
+const removeCartProduct =(product: IProduct)=>{
+
+   const removeProducts = state.cart.filter(p=>
+      !(p.article?.id === product.article?.id && p.article?.articlesSizes[0].id === product.article?.articlesSizes[0].id )
+   )
+   //console.log(removeProducts);
+   
+   dispatch({type: '[Cart] - Remove product in cart',payload: removeProducts })
+}
+
 return (
    <CartContext.Provider value={{
       ...state,
@@ -74,6 +110,7 @@ return (
       //Methods
       addArticleToCart,
       updateCartQuantity,
+      removeCartProduct,
 
    }}>
    {children}

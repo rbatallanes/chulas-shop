@@ -6,12 +6,13 @@ import { Image } from 'mui-image'
 import { useRouter } from 'next/router';
 import { color } from '@mui/system';
 import { useContext, useState } from 'react';
-import { UiContext } from '../../context';
+import { UiContext,CartContext } from '../../context';
 
 export const Navbar = () => {
 
   const {asPath,push} = useRouter()
   const {toggleSideMenu} = useContext(UiContext)
+  const {numberOfItems} = useContext(CartContext)
   const [isVisibleSearch, setIsVisibleSearch] = useState(false)
 
   const [searchTerm, setSearchTerm] = useState('')
@@ -110,7 +111,7 @@ export const Navbar = () => {
               <NextLink legacyBehavior href={'/cart'} passHref>
                 <Link underline="none">
                   <IconButton>
-                    <Badge badgeContent={2} color='secondary'>
+                    <Badge badgeContent={numberOfItems > 10 ? '+10':numberOfItems} color='secondary'>
                       <ShoppingCartOutlined/>
                     </Badge>
                   </IconButton>

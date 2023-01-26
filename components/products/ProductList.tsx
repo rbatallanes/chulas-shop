@@ -1,15 +1,17 @@
 import { Grid } from '@mui/material'
 import React, { FC } from 'react'
-import { Article, ICustomProduct, IProduct, Product } from '../../interfaces'
+import { ICustomProduct} from '../../interfaces'
 import {ProductCard} from '.';
 
 interface Props{
-    //products: IProduct[];
-    //products: Product[];
     products: ICustomProduct[];
+    //products: ICustomArticle[];
 }
 
 export const ProductList: FC<Props> = ({products}) => {
+
+    console.log(products);
+    
   return (
     <Grid container spacing={4}>
         {

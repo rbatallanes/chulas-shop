@@ -1,12 +1,12 @@
 import React, { FC, useMemo, useState } from 'react';
 import NextLink from 'next/link';
 import { Box, Card, CardActionArea, CardMedia, Chip, Grid, Link, Typography } from '@mui/material'
-import { Article, ICustomProduct, IProduct, Product } from '../../interfaces'
+import { ICustomProduct } from '../../interfaces'
 
 interface Props{
-  //product: IProduct;
-  //product: Product;
-  product: ICustomProduct; //ICustomProduct ???
+
+  // product: ICustomArticle;
+  product: ICustomProduct;
 }
 
 export const ProductCard: FC<Props> = ({product}) => {
@@ -18,8 +18,8 @@ export const ProductCard: FC<Props> = ({product}) => {
 
   const productImage = useMemo(() => {
     return isHovered 
-    ? `products/${images.length>1 ? images[1] : images[0] }` 
-    : `products/${images[0]}`
+    ? `/products/${images.length>1 ? images[1] : images[0] }` 
+    : `/products/${images[0]}`
     // ? `products/${product.images[1].name}`
     // : `products/${product.images[0].name}`
   //}, [isHovered,product.articles[0].images])
@@ -37,6 +37,7 @@ export const ProductCard: FC<Props> = ({product}) => {
             <Link> 
               <CardActionArea>
                 {
+                  !!product &&
                   product.inStock === 0 && (
                     <Chip
                       color='primary'
@@ -64,7 +65,7 @@ export const ProductCard: FC<Props> = ({product}) => {
 
         <Box sx={{mt:1,display:setImageLoad ? 'block':'none'}} className='fadeIn'>
           <Typography fontWeight={700}>{product.brand}</Typography>
-          <Typography fontWeight={500}>${product.salePrice}</Typography>
+          <Typography fontWeight={500}>${ !!product && product.salePrice}</Typography>
         </Box>
     </Grid>
   )
