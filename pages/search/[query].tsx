@@ -4,10 +4,11 @@ import { Box, Typography } from '@mui/material'
 import {ShopLayout} from '../../components/layouts'
 import { ProductList } from '../../components/products'
 import { shopApi } from '../../api'
-import { Article } from '../../interfaces'
+import { Article, ICustomProduct } from '../../interfaces'
 
 interface Props{
-    articles: Article[];
+    //articles: Article[];
+    articles: ICustomProduct[];
     foundArticles: boolean;
     query: string;
 }
@@ -24,9 +25,12 @@ const SearchPage: NextPage<Props> = ({articles,foundArticles,query})=>{
 
       {
         foundArticles
-         ? <Typography variant='h2' sx={{mb:1}} textTransform='capitalize'>Encontramos lo siguiente con: {query}</Typography>
+         ? (<Box display={'flex'}>
+                <Typography variant='h2' sx={{mb:1}}>Encontramos lo siguiente con: </Typography>
+                <Typography variant='h2' sx={{ml:1}} color='secondary' textTransform='capitalize'>{query}</Typography>
+            </Box>)
          : (<Box display={'flex'}>
-                <Typography variant='h2' sx={{mb:1}}>No encontramos ningún artículo con: </Typography>
+                <Typography variant='h2' sx={{mb:1}}> No encontramos ningún artículo con: </Typography>
                 <Typography variant='h2' sx={{ml:1}} color='secondary' textTransform='capitalize'>{query}</Typography>
                 <Typography variant='h2' sx={{ml:1}}>Quizás te pueda interesar: </Typography>
             </Box>)
@@ -53,13 +57,13 @@ export const getServerSideProps: GetServerSideProps = async ({params}) => {
         }
     }
 
-    const { data } = await  shopApi.get<Article[]>(`/articles/title/${query}`) 
+    const { data } = await  shopApi.get<ICustomProduct[]>(`/articles/title/${query}`) 
     let articles = data
     const foundArticles = data.length>0
 
     console.log(data)
     if(!foundArticles){
-        const { data } = await  shopApi.get<Article[]>(`/articles`) 
+        const { data } = await  shopApi.get<ICustomProduct[]>(`/products/articlesGroupByProducts`) 
         articles = data
     }
     

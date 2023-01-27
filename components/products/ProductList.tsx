@@ -15,9 +15,9 @@ export const ProductList: FC<Props> = ({products}) => {
   return (
     <Grid container spacing={4}>
         {
-            products.map(product=>(
+            products.map((product,idx)=>(
                 <ProductCard 
-                    key={product.id}
+                    key={idx}
                     product={product}
                 />
             ))
