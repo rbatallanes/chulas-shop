@@ -16,12 +16,14 @@ export const ColorSelector: FC<Props> = ({articles,selectedColor,onSelectedColor
     return (
         <Box >
             { articles.map((article,idx)=>(
-                <>
+                <React.Fragment key={idx}>
                     {/* <h3>{article.id}</h3> */}
                     <IconButton
-                        key={article.id}
+                        key={idx}
                         //className='fadeIn'
-                        onClick={()=>{onSelectedColor(article,idx),console.log(article);
+                        onClick={()=>{
+                            onSelectedColor(article,idx),
+                            console.log(article);
                         }}
                     >
                         <Fab 
@@ -31,13 +33,13 @@ export const ColorSelector: FC<Props> = ({articles,selectedColor,onSelectedColor
                         }}>
                         {
                             selectedColor === article.colors.id
-                            ? <DoneOutlineOutlinedIcon sx={{ color: red[200] }} />
+                            ? (<DoneOutlineOutlinedIcon sx={{ color: red[200] }} />)
                             : null
                         }
                         </Fab>                       
                     </IconButton>  
                 
-                </>
+                </React.Fragment>
                 ))
             }                   
         </Box>

@@ -33,6 +33,8 @@ const ProductPage: NextPage<Props> = ({product}) => {
   const {addArticleToCart} = useContext(CartContext)
   const [articleId, setArticleId] = useState(0)
   const [isSize, setIsSize] = useState(false)
+  const [isColor, setColor] = useState(false)
+  const [isSelectedSize, setSelectedSize] = useState(false)
   const [tempCartArticle, settempCartArticle] = useState<IProduct>({
 
     // SET POR IPRODUCT Y EL ARTICLE: UNDEFINED 
@@ -48,7 +50,9 @@ const ProductPage: NextPage<Props> = ({product}) => {
   })
 
   const onSelectedColor = (article: Article,artId:number) => {
-    //console.log('En Padre '+ {article});
+    
+
+    tempCartArticle.article?.id !== article.id && setSelectedSize(false);
     
     settempCartArticle(currentArticle=>({
       ...currentArticle,
@@ -62,6 +66,7 @@ const ProductPage: NextPage<Props> = ({product}) => {
     setArticleId(artId)  // cambia el valor del select
     setIsSize(false)
     updateQuantity(1)
+    setColor(true)
   };
 
 
@@ -73,6 +78,7 @@ const ProductPage: NextPage<Props> = ({product}) => {
     }))
     setIsSize(true)
     updateQuantity(1)
+    setSelectedSize(true)
   };
 
   const updateQuantity =(quantity:number)=>{
@@ -97,40 +103,47 @@ const ProductPage: NextPage<Props> = ({product}) => {
       <Grid container spacing={3}>
         <Grid item xs={12} sm={7}>
           {/* SlideShow */}
-          <ProductSlideshow articles={product.articles}/> {/* tempCartArticle.articles */}
+          {/* {VERIFICAR PARA LAS IMAGENES DEL tempCartArticle} */}
+          {/* <ProductSlideshow articles={(!!tempCartArticle.article ? Array.isArray(tempCartArticle.article) : product.articles)}/> */}
+          <ProductSlideshow articles={!!tempCartArticle.article ? [tempCartArticle.article] : product.articles}/>
           {/* <ProductSlideshow/> */}
         </Grid>
         <Grid item xs={12} sm={5}>
           <Box display={'flex'} flexDirection='column'>
-            {/* Titulos */}
             <Typography variant='h1' component={'h1'}>{product.brand}</Typography>
             <Typography variant='subtitle1' component={'h2'}>$ {product.articles[0]?.salePrice}</Typography>
 
-            {/* cantidad */}
             <Box sx={{my:2}}>
-            <Typography variant='subtitle2'>Color</Typography>
+              <Typography variant='subtitle2'>Color</Typography>
               <ColorSelector
                 articles={product.articles}
                 selectedColor={tempCartArticle.article?.colors.id} 
                 onSelectedColor={onSelectedColor}
               />
-              
-              <SizeSelector 
-                article={product.articles[`${articleId}`]}
-                onSelectedSize={onSelectedSize}
-                />
-              <Typography variant='subtitle2'>Cantidad</Typography>
-              <ItemCounter
-                currentValue={tempCartArticle.quantity}
-                updateQuantity={updateQuantity}
-                
-                inStock=
-                {!!tempCartArticle.article 
-                  ? tempCartArticle.article?.articlesSizes[0].stocks[0].inStock 
-                  : 0
-                }
-                isSize={isSize}
-              />
+
+              {isColor && (                
+                <SizeSelector 
+                  article={product.articles[`${articleId}`]}
+                  onSelectedSize={onSelectedSize}
+                  />
+              )}
+
+              {isSelectedSize && (
+                <>
+                  <Typography variant='subtitle2'>Cantidad</Typography>
+                    <ItemCounter
+                      currentValue={tempCartArticle.quantity}
+                      updateQuantity={updateQuantity}
+                      
+                      inStock=
+                      {!!tempCartArticle.article 
+                        ? tempCartArticle.article?.articlesSizes[0].stocks[0].inStock 
+                        : 0
+                      }
+                      isSize={isSize}
+                    />
+                </>
+              )}
 
             </Box>
 
@@ -138,24 +151,46 @@ const ProductPage: NextPage<Props> = ({product}) => {
 
             {
               //product.articles[0]?.stocks[0].inStock > 0 
-              true
-                ? (
-                    <Button 
-                      color='secondary' 
-                      className='circular-btn'
-                      onClick={onAddArticle}
-                      variant="outlined"
-                    >
-                      {/* {  tempCartArticle.colors 
-                          ? tempCartArticle.sizes ? 'Agregar al carrito' :'Seleccione un talle'
-                          : 'Seleccione un color'
-                        } */}
-                        Agregar al carrito
-                    </Button>
+              tempCartArticle.article === undefined
+              ?
+                (<Chip 
+                  label='Seleccioná un color' 
+                  color='info' 
+                />)
+              :
+              (
+                !isSize
+                ?
+                  (<Chip 
+                    label='Seleccioná un talle' 
+                    color='info' 
+                  />)
+                :
+                tempCartArticle.article?.articlesSizes[0]?.stocks[0]?.inStock > 0
+                 
+                  ? (
+                      <Button 
+                        disabled={!isSelectedSize}
+                        color='secondary' 
+                        className='circular-btn'
+                        onClick={onAddArticle}
+                        variant="outlined"
+                      >
+                        {/* {  tempCartArticle.colors 
+                            ? tempCartArticle.sizes ? 'Agregar al carrito' :'Seleccione un talle'
+                            : 'Seleccione un color'
+                          } */}
+                          Agregar al carrito
+                      </Button>
+                    )
+                  :(
+                    <Chip 
+                      label='No hay disponible' 
+                      color='error' 
+                      variant='outlined'
+                    />
                   )
-                :(
-                  <Chip label='No hay disponible' color='error' variant='outlined'/>
-                )
+              )
             }
 
             {/* Descripción */}

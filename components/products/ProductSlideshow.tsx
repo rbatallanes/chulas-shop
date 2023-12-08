@@ -11,12 +11,18 @@ interface Props{
 }
 
 export const ProductSlideshow: FC<Props> = ({articles}) => {
+  let shouldAutoplay = true
+
+  if(articles.length === 1){
+    if(articles[0].images.length === 1){  shouldAutoplay = false;}
+  }
 
   return (
     <Slide
-      easing='ease'
-      duration={7000}
-      indicators
+      easing="ease"
+      duration= {shouldAutoplay ? 7000 : 0}
+      indicators={shouldAutoplay}
+      autoplay={shouldAutoplay}
     >
       {articles.map((article,idx)=>(
           article.images.map(image=>{
