@@ -1,6 +1,6 @@
 import NextLink from "next/link";
 import { Box, Button, Chip, Grid, Link, TextField, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { AuthLayout } from '../../components/layouts'
 import { useForm } from "react-hook-form";
 import { shopApi } from "../../api";
@@ -8,42 +8,39 @@ import axios from "axios";
 import { ErrorOutline } from "@mui/icons-material";
 import useSWR from "swr";
 import Cookies from "js-cookie";
+import { AuthContext } from "../../context";
+import { useRouter } from "next/router";
 
 type FormData ={
-    username: string,
+    email: string,
     password: string
 }
 
 const LoginPage = () => {
 
+    const router = useRouter()
+    const {loginUser} = useContext(AuthContext)
     const { register, handleSubmit, formState: { errors } } = useForm<FormData>()
 
     const [showError, setShowError] =   useState(false)
     
-    const onLoginUser = async({username, password}: FormData) => {
+    const onLoginUser = async({email, password}: FormData) => {
 
         
         setShowError(false)
-        try {
-            const { data } = await  shopApi.post(`/login`, {username, password}) 
-            const { token,user } = data
-            Cookies.set('token', token)
-            console.log({token,user});
-            
 
-        } catch (error) {
-            console.log('error en las credenciales');
+        const isValidLogin = await loginUser(email, password)
+
+        if(!isValidLogin){
             setShowError(true)
             setTimeout(() => {
                 setShowError(false)
             }, 3000);
-            
-            if(axios.isAxiosError(error)){
-                console.log({error});
-            }
+            return
         }
 
         // Todo: navegar a la proxima pagina
+        router.replace('/')
         
     }
 
@@ -65,13 +62,13 @@ const LoginPage = () => {
                     </Grid>
                     <Grid item xs={12}>
                         <TextField 
-                            label='username' 
-                            type="username"
+                            label='email' 
+                            type="email"
                             variant='filled' 
                             fullWidth
-                            {...register('username',{ required: 'Este campo es requerido' })}
-                            error={!!errors.username}
-                            helperText={errors.username?.message}
+                            {...register('email',{ required: 'Este campo es requerido' })}
+                            error={!!errors.email}
+                            helperText={errors.email?.message}
                         />
                     </Grid>
                     <Grid item xs={12}>
