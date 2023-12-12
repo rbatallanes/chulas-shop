@@ -23,7 +23,8 @@ export default function App({ Component, pageProps }: AppProps) {
     <SWRConfig 
       value={{
         // refreshInterval: 3000,  intervalo de loading en página
-        fetcher: (resource, init) => fetch(resource, init).then(res => res.json())
+        fetcher: (resource, init) => 
+        fetch(resource, { ...init, credentials: "include" }).then(res => res.json())
       }}
     >
       <AuthProvider>
