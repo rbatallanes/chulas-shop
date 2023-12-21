@@ -20,13 +20,13 @@ export default function App({ Component, pageProps }: AppProps) {
   }
 
   return (
-    <SWRConfig 
-      value={{
-        // refreshInterval: 3000,  intervalo de loading en página
-        fetcher: (resource, init) => 
-        fetch(resource, { ...init, credentials: "include" }).then(res => res.json())
-      }}
-    >
+    // <SWRConfig 
+    //   value={{
+    //     // refreshInterval: 3000,  intervalo de loading en página
+    //     fetcher: (resource, init) => 
+    //     fetch(resource, { ...init, credentials: "include" }).then(res => res.json())
+    //   }}
+    // >
       <AuthProvider>
         <CartProvider>
           <UiProvider>
@@ -37,6 +37,6 @@ export default function App({ Component, pageProps }: AppProps) {
           </UiProvider>
         </CartProvider>
       </AuthProvider>
-    </SWRConfig>
+    // </SWRConfig>
     )
 }
